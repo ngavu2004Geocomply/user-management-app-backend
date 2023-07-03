@@ -1,0 +1,33 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+  app:
+    image: laravel-react-app
+    container_name: user-management-app
+    volumes:
+      - ./:/app
+    ports:
+      - "8000:8000"
+    
+
+  db:
+    image: mysql:8.0.33-debian
+    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # (this is just an example, not intended to be a production configuration)
+    container_name: user-management-db
+    # command: --default-authentication-plugin=mysql_native_password
+    # restart: always
+    ports:
+      - "8001:8001"
+    volumes:
+      - userManagementDb:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_USER=admin
+      - DB_HOST=127.0.0.1
+      - MYSQL_DATABASE=laravel
+
+volumes:
+  userManagementDb:
